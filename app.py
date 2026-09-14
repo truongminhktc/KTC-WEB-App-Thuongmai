@@ -34,7 +34,7 @@ CUSTOM_CSS = """
         background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
         border: 1px solid #334155;
         border-radius: 12px;
-        padding: 14px 24px;
+        padding: 12px 24px;
         margin-bottom: 16px;
         display: flex;
         justify-content: space-between;
@@ -71,7 +71,7 @@ CUSTOM_CSS = """
         letter-spacing: 0.05em;
     }
     .kpi-value {
-        font-size: 1.45rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: #F8FAFC;
         margin: 4px 0 2px 0;
@@ -96,8 +96,8 @@ CUSTOM_CSS = """
         border: 1px solid #334155;
         border-left: 4px solid #EF4444;
         border-radius: 8px;
-        padding: 12px 16px;
-        margin-bottom: 10px;
+        padding: 10px 14px;
+        margin-bottom: 8px;
     }
     
     /* Custom Tabs */
@@ -162,7 +162,7 @@ st.markdown("""
 <div class="dashboard-header">
     <div>
         <h1 class="header-title">BÁO CÁO GIÁM SÁT KINH DOANH KHATOCO</h1>
-        <div class="header-subtitle">Hệ thống Phân tích Chuyên sâu & Kiểm soát Biến động Bán hàng v5.0</div>
+        <div class="header-subtitle">Hệ thống Phân tích Chuyên sâu & Kiểm soát Tiêu thụ v6.0</div>
     </div>
     <span style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #059669; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">● TRỰC TUYẾN</span>
 </div>
@@ -279,7 +279,7 @@ with tab_dashboard:
         if sel_sp: df_filtered = df_filtered[df_filtered['Ten_SP'].isin(sel_sp)]
         if sel_npp: df_filtered = df_filtered[df_filtered['Thuyet_Minh_NPP'].isin(sel_npp)]
         
-        # --- CÁC CHỈ SỐ KPI CHÍNH (4 COLUMNS IN 1 ROW) ---
+        # --- CÁC CHỈ SỐ KPI CHÍNH ---
         k1, k2, k3, k4 = st.columns(4)
         
         tong_dt = df_filtered['Doanh_Thu'].sum()
@@ -323,15 +323,16 @@ with tab_dashboard:
         st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
 
         # --- SUB-TABS PHÂN TÍCH & CẢNH BÁO ---
-        sub_t1, sub_t2, sub_t3, sub_t4 = st.tabs([
-            "🚨 CẢNH BÁO BIẾN ĐỘNG & GIẢI PHÁP", 
-            "🛍️ PHÂN TÍCH SẢN PHẨM & ĐƠN GIÁ", 
-            "🌍 CƠ CẤU THỊ TRƯỜNG / ĐỊA BÀN", 
+        sub_t1, sub_t2, sub_t3, sub_t4, sub_t5 = st.tabs([
+            "🚨 CẢNH BÁO BIẾN ĐỘNG MOM", 
+            "🧩 MA TRẬN SẢN PHẨM × ĐỊA BÀN", 
+            "🛍️ CƠ CẤU SẢN PHẨM THEO MÃ_KH", 
+            "🌍 CƠ CẤU THỊ TRƯỜNG & PARETO", 
             "📋 BẢNG THAM CHIẾU MÃ_KH CHI TIẾT"
         ])
         
         # -------------------------------------------------------------
-        # SUB-TAB 1: CẢNH BÁO BIẾN ĐỘNG MOM & GIẢI PHÁP BÁN HÀNG
+        # SUB-TAB 1: CẢNH BÁO BIẾN ĐỘNG MOM & GIẢI PHÁP
         # -------------------------------------------------------------
         with sub_t1:
             c_select1, c_select2 = st.columns(2)
@@ -368,16 +369,14 @@ with tab_dashboard:
                         top_changes, x='ChenhLech_SL', y='Thuyet_Minh_NPP', orientation='h',
                         color='Tyle_MoM_SL(%)',
                         color_continuous_scale=['#EF4444', '#FBBF24', '#10B981'],
-                        text_auto=',.0f',
-                        title=""
+                        text_auto=',.0f', title=""
                     )
                     fig_mom.update_layout(
                         height=350, margin=dict(l=10, r=20, t=10, b=20),
                         paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                         font=dict(color='#94A3B8', family='Plus Jakarta Sans'),
                         xaxis=dict(title="Sản lượng tăng/giảm (bao)", showgrid=True, gridcolor='#334155'),
-                        yaxis=dict(title="", showgrid=False),
-                        coloraxis_showscale=False
+                        yaxis=dict(title="", showgrid=False), coloraxis_showscale=False
                     )
                     st.plotly_chart(fig_mom, use_container_width=True)
                     
@@ -392,8 +391,8 @@ with tab_dashboard:
                             <div class="solution-card">
                                 <b style="color:#F8FAFC;">{row['Thuyet_Minh_NPP']}</b><br>
                                 <span style="color:#F87171;">📉 Giảm: {abs(row['ChenhLech_SL']):,.0f} bao ({row['Tyle_MoM_SL(%)']}%)</span><br>
-                                <span style="font-size:0.8rem; color:#94A3B8;">
-                                <b>Giải pháp xử lý:</b> Giám sát bán hàng (SS) kiểm tra tồn kho điểm bán, rà soát chương trình khuyến mãi cạnh tranh và hỗ trợ đẩy hàng.
+                                <span style="font-size:0.78rem; color:#94A3B8;">
+                                <b>Hành động:</b> Giám sát bán hàng (SS) kiểm tra tồn kho điểm bán và chương trình khuyến mãi cạnh tranh.
                                 </span>
                             </div>
                             """, unsafe_allow_html=True)
@@ -404,56 +403,80 @@ with tab_dashboard:
                 st.dataframe(
                     merged[['Ma_KH', 'Thuyet_Minh_NPP', 'San_Luong_KySoSanh', 'San_Luong_KyBaoCao', 'ChenhLech_SL', 'Tyle_MoM_SL(%)', 'Trang_Thai']]
                     .sort_values(by='ChenhLech_SL', ascending=True),
-                    use_container_width=True, height=220
+                    use_container_width=True, height=200
                 )
             else:
                 st.info("Vui lòng chọn 2 tháng khác nhau để đối soát.")
 
         # -------------------------------------------------------------
-        # SUB-TAB 2: PHÂN TÍCH SẢN PHẨM & ĐƠN GIÁ
+        # SUB-TAB 2: MA TRẬN SẢN PHẨM × ĐỊA BÀN (HEATMAP)
         # -------------------------------------------------------------
         with sub_t2:
-            prod_summary = df_filtered.groupby('Ten_SP').agg({'San_Luong': 'sum', 'Doanh_Thu': 'sum'}).reset_index()
-            prod_summary['Don_Gia_TB'] = (prod_summary['Doanh_Thu'] / prod_summary['San_Luong'].replace(0, 1)).round(0)
-            prod_summary = prod_summary.sort_values(by='San_Luong', ascending=False)
+            st.markdown("##### 🧩 Bản Đồ Nhiệt: Phân Bổ Sản Lượng Sản Phẩm Theo Địa Bàn Tiêu Thụ")
             
-            c_prod1, c_prod2 = st.columns([1.2, 0.8])
+            metric_choice = st.radio("Chọn chỉ số hiển thị ma trận:", ["Sản Lượng (bao)", "Doanh Thu (đồng)"], horizontal=True)
+            col_target = 'San_Luong' if metric_choice == "Sản Lượng (bao)" else 'Doanh_Thu'
             
-            with c_prod1:
-                fig_prod = px.bar(
-                    prod_summary, x='San_Luong', y='Ten_SP', orientation='h',
-                    color='Doanh_Thu',
-                    color_continuous_scale=['#0284C7', '#38BDF8', '#818CF8'],
+            pivot_geo = df_filtered.pivot_table(index='Ten_SP', columns='Dia_Ban', values=col_target, aggfunc='sum', fill_value=0)
+            
+            if not pivot_geo.empty:
+                fig_heat = px.imshow(
+                    pivot_geo,
+                    labels=dict(x="Địa Bàn Tiêu Thụ", y="Dòng Sản Phẩm", color=metric_choice),
+                    color_continuous_scale="Cividis",
                     text_auto=',.0f',
-                    title="<b>SẢN LƯỢNG TIÊU THỤ THEO DÒNG SẢN PHẨM (BAO)</b>"
+                    title=""
                 )
-                fig_prod.update_layout(
-                    height=340, margin=dict(l=10, r=20, t=35, b=20),
+                fig_heat.update_layout(
+                    height=380, margin=dict(l=20, r=20, t=20, b=20),
                     paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                     font=dict(color='#94A3B8', family='Plus Jakarta Sans'),
-                    xaxis=dict(title="Sản lượng (bao)", showgrid=True, gridcolor='#334155'),
-                    yaxis=dict(title="", showgrid=False, autorange="reversed"),
-                    coloraxis_showscale=False
+                    xaxis=dict(title="", showgrid=False),
+                    yaxis=dict(title="", showgrid=False)
                 )
-                st.plotly_chart(fig_prod, use_container_width=True)
+                st.plotly_chart(fig_heat, use_container_width=True)
                 
-            with c_prod2:
-                st.markdown("##### 💰 Bảng Cơ Cấu Giá & Doanh Thu")
-                st.dataframe(
-                    prod_summary.rename(columns={
-                        'Ten_SP': 'Sản Phẩm', 'San_Luong': 'Sản Lượng (bao)', 
-                        'Doanh_Thu': 'Doanh Thu (đ)', 'Don_Gia_TB': 'Đơn Giá TB (đ)'
-                    }),
-                    use_container_width=True, height=300
-                )
+                st.markdown("💡 **Gợi ý phân tích:** Các ô có **màu tối hoặc giá trị 0** thể hiện dải sản phẩm chưa phủ được vào địa bàn đó. Giám sát bán hàng cần tập trung mở rộng kênh phân phối.")
+            else:
+                st.warning("Không có dữ liệu phù hợp với bộ lọc.")
 
         # -------------------------------------------------------------
-        # SUB-TAB 3: CƠ CẤU THỊ TRƯỜNG / ĐỊA BÀN
+        # SUB-TAB 3: CƠ CẤU SẢN PHẨM THEO MÃ_KH (NPP)
         # -------------------------------------------------------------
         with sub_t3:
-            region_df = df_filtered.groupby('Dia_Ban').agg({'San_Luong':'sum', 'Doanh_Thu':'sum'}).reset_index().sort_values(by='San_Luong', ascending=False)
+            st.markdown("##### 🛍️ Phân Tích Cơ Cấu Dòng Sản Phẩm Tiêu Thụ Theo Từng Mã_KH / NPP")
             
+            # Cột chồng Stacked Bar Chart
+            fig_stack = px.bar(
+                df_filtered, x="San_Luong", y="Thuyet_Minh_NPP", color="Ten_SP",
+                orientation="h",
+                title="",
+                color_discrete_sequence=px.colors.qualitative.Bold,
+                text_auto=',.0f'
+            )
+            fig_stack.update_layout(
+                height=380, margin=dict(l=10, r=20, t=10, b=20),
+                paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#94A3B8', family='Plus Jakarta Sans'),
+                xaxis=dict(title="Tổng Sản Lượng (bao)", showgrid=True, gridcolor='#334155'),
+                yaxis=dict(title="", showgrid=False, autorange="reversed"),
+                barmode='stack',
+                legend=dict(title="Sản Phẩm", orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            )
+            st.plotly_chart(fig_stack, use_container_width=True)
+            
+            # Bảng chi tiết Pivot theo Mã_KH x sản phẩm
+            st.markdown("##### 📋 Bảng Báo Cáo Chi Tiết Sản Lượng Sản Phẩm (bao) Theo Mã_KH")
+            pivot_npp_prod = df_filtered.pivot_table(index=['Ma_KH', 'Ten_NPP', 'Dia_Ban'], columns='Ten_SP', values='San_Luong', aggfunc='sum', fill_value=0).reset_index()
+            st.dataframe(pivot_npp_prod, use_container_width=True, height=220)
+
+        # -------------------------------------------------------------
+        # SUB-TAB 4: CƠ CẤU THỊ TRƯỜNG & PARETO (ABC ANALYSIS)
+        # -------------------------------------------------------------
+        with sub_t4:
             c_reg1, c_reg2 = st.columns([1, 1])
+            
+            region_df = df_filtered.groupby('Dia_Ban').agg({'San_Luong':'sum', 'Doanh_Thu':'sum'}).reset_index().sort_values(by='San_Luong', ascending=False)
             
             with c_reg1:
                 fig_donut = px.pie(
@@ -471,27 +494,37 @@ with tab_dashboard:
                 st.plotly_chart(fig_donut, use_container_width=True)
                 
             with c_reg2:
-                fig_reg_bar = px.bar(
-                    region_df, x='Dia_Ban', y='Doanh_Thu',
-                    text_auto=',.0f',
-                    color='Doanh_Thu',
-                    color_continuous_scale=['#059669', '#10B981', '#34D399'],
-                    title="<b>DOANH THU TIÊU THỤ THEO TỈNH / THÀNH (ĐỒNG)</b>"
-                )
-                fig_reg_bar.update_layout(
-                    height=340, margin=dict(l=10, r=20, t=35, b=20),
-                    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-                    font=dict(color='#94A3B8', family='Plus Jakarta Sans'),
-                    xaxis=dict(title="", showgrid=False),
-                    yaxis=dict(title="Doanh thu (đồng)", showgrid=True, gridcolor='#334155'),
-                    coloraxis_showscale=False
-                )
-                st.plotly_chart(fig_reg_bar, use_container_width=True)
+                # Phân tích Pareto ABC Sản Phẩm
+                prod_abc = df_filtered.groupby('Ten_SP').agg({'Doanh_Thu': 'sum', 'San_Luong': 'sum'}).reset_index()
+                prod_abc = prod_abc.sort_values(by='Doanh_Thu', ascending=False)
+                tot_rev = prod_abc['Doanh_Thu'].sum()
+                
+                if tot_rev > 0:
+                    prod_abc['Cum_DT'] = prod_abc['Doanh_Thu'].cumsum()
+                    prod_abc['Cum_Pct'] = (prod_abc['Cum_DT'] / tot_rev) * 100
+                    
+                    def classify_abc(pct):
+                        if pct <= 80: return 'Hạng A (Chủ lực - 80% DT)'
+                        elif pct <= 95: return 'Hạng B (Phát triển - 15% DT)'
+                        else: return 'Hạng C (Tiềm năng/Mới - 5% DT)'
+                        
+                    prod_abc['Phan_Hang_Pareto'] = prod_abc['Cum_Pct'].apply(classify_abc)
+                    prod_abc['Don_Gia_Binh_Quan'] = (prod_abc['Doanh_Thu'] / prod_abc['San_Luong'].replace(0, 1)).round(0)
+                    
+                    st.markdown("##### 🏆 Phân Hạng Pareto ABC Dòng Sản Phẩm")
+                    st.dataframe(
+                        prod_abc[['Ten_SP', 'San_Luong', 'Doanh_Thu', 'Don_Gia_Binh_Quan', 'Phan_Hang_Pareto']].rename(columns={
+                            'Ten_SP': 'Sản Phẩm', 'San_Luong': 'Sản Lượng (bao)', 
+                            'Doanh_Thu': 'Doanh Thu (đ)', 'Don_Gia_Binh_Quan': 'Đơn Giá TB (đ)',
+                            'Phan_Hang_Pareto': 'Phân Hạng ABC'
+                        }),
+                        use_container_width=True, height=280
+                    )
 
         # -------------------------------------------------------------
-        # SUB-TAB 4: BẢNG THAM CHIẾU CHI TIẾT
+        # SUB-TAB 5: BẢNG THAM CHIẾU CHI TIẾT
         # -------------------------------------------------------------
-        with sub_t4:
+        with sub_t5:
             st.markdown("##### 📋 Dữ Liệu Tham Chiếu Chi Tiết Mã_KH")
             st.dataframe(
                 df_filtered[['Thang', 'Ma_KH', 'Ten_NPP', 'Dia_Ban', 'Ten_SP', 'San_Luong', 'Doanh_Thu']], 
