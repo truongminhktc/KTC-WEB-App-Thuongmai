@@ -8,7 +8,7 @@ import unicodedata
 import io
 
 # ---------------------------------------------------------
-# 1. CẤU HÌNH TRANG & DARK THEME C-SUITE UI/UX
+# 1. CẤU HÌNH TRANG & DESIGN SYSTEM CHUẨN C-SUITE
 # ---------------------------------------------------------
 st.set_page_config(
     page_title="KTC C-Suite Strategic Executive Analytics",
@@ -17,65 +17,177 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Executive Dark Style Sheet
+# Custom Master Executive Dark Theme (Obsidian Glassmorphism)
 st.markdown("""
 <style>
-    /* Dark Theme Core */
-    .stApp { background-color: #0b0f19; color: #f1f5f9; }
-    
-    /* Executive Header */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Canvas Background */
+    .stApp {
+        background-color: #080c14;
+        color: #f3f4f6;
+    }
+
+    /* Executive Header Banner */
     .csuite-header {
-        background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
-        border: 1px solid #312e81;
-        color: #ffffff;
-        padding: 20px 25px;
-        border-radius: 12px;
-        margin-bottom: 20px;
+        background: linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        border-radius: 16px;
+        padding: 24px 30px;
+        margin-bottom: 24px;
     }
-    .csuite-header h2 { color: #38bdf8; margin: 0 0 6px 0; font-weight: 700; font-size: 1.5rem; }
-    .csuite-header p { color: #94a3b8; margin: 0; font-size: 0.9rem; }
-    
-    /* Executive Insight Box */
+    .csuite-header h2 {
+        background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px 0;
+        font-size: 1.65rem;
+    }
+    .csuite-header p {
+        color: #94a3b8;
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Executive Insight Glass Box */
     .ceo-box {
-        background: #131c31;
+        background: linear-gradient(135deg, rgba(19, 28, 49, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
         border-left: 4px solid #38bdf8;
-        border-radius: 8px;
-        padding: 16px 20px;
-        margin-bottom: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 28px;
+        box-shadow: 0 12px 32px -10px rgba(0,0,0,0.5);
     }
-    .ceo-title { color: #38bdf8; font-weight: 700; font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-    .ceo-content { color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; }
+    .ceo-title {
+        color: #38bdf8;
+        font-weight: 700;
+        font-size: 0.98rem;
+        margin-bottom: 10px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+    .ceo-content {
+        color: #cbd5e1;
+        font-size: 0.92rem;
+        line-height: 1.65;
+    }
 
-    /* KPI Cards Dark Mode */
+    /* KPI Glass Cards with Hover Elevation */
     .kpi-card {
-        background: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 10px;
-        padding: 16px;
+        background: rgba(17, 24, 39, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 18px 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .kpi-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 600; }
-    .kpi-value { font-size: 1.5rem; font-weight: 800; color: #f8fafc; margin: 4px 0; }
-    .kpi-sub { font-size: 0.75rem; font-weight: 500; }
+    .kpi-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(56, 189, 248, 0.4);
+        box-shadow: 0 12px 28px -5px rgba(56, 189, 248, 0.15);
+    }
+    .kpi-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+        font-weight: 700;
+    }
+    .kpi-value {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #f8fafc;
+        margin: 6px 0;
+        letter-spacing: -0.02em;
+    }
+    .kpi-sub {
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
 
-    /* Quadrant Card Custom */
-    .quad-card {
-        background: #1e293b;
+    /* Redesigned Streamlit Tab Bar */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: rgba(15, 23, 42, 0.7);
+        padding: 6px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 42px;
         border-radius: 8px;
-        padding: 14px;
+        color: #9ca3af;
+        font-weight: 600;
+        font-size: 0.88rem;
+        border: none !important;
+        padding: 0 18px;
+        transition: all 0.2s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #1e293b !important;
+        color: #38bdf8 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Quadrant Strategic Cards */
+    .quad-card {
+        background: rgba(30, 41, 59, 0.7);
+        border-radius: 10px;
+        padding: 14px 16px;
         border-top: 3px solid #64748b;
-        height: 100%;
+        margin-bottom: 12px;
+    }
+
+    /* Sidebar Customization */
+    section[data-testid="stSidebar"] {
+        background-color: #0d1322;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Layout Plotly dùng chung cho Dark Mode
+# ---------------------------------------------------------
+# MASTER DESIGN SYSTEM PLOTLY
+# ---------------------------------------------------------
+EXECUTIVE_PALETTE = ['#38bdf8', '#34d399', '#fbbf24', '#818cf8', '#f87171', '#a78bfa', '#f472b6']
+
 DARK_LAYOUT = dict(
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='#e2e8f0', family="Inter, sans-serif"),
-    xaxis=dict(showgrid=False, zeroline=False, color='#94a3b8'),
-    yaxis=dict(showgrid=True, gridcolor='#1e293b', zeroline=False, color='#94a3b8'),
-    margin=dict(l=20, r=20, t=40, b=20)
+    font=dict(color='#cbd5e1', family="Plus Jakarta Sans, sans-serif", size=12),
+    xaxis=dict(
+        showgrid=False, 
+        zeroline=False, 
+        color='#94a3b8', 
+        tickfont=dict(size=11, color='#94a3b8')
+    ),
+    yaxis=dict(
+        showgrid=True, 
+        gridcolor='rgba(255,255,255,0.06)', 
+        zeroline=False, 
+        color='#94a3b8', 
+        tickfont=dict(size=11, color='#94a3b8')
+    ),
+    hoverlabel=dict(
+        bgcolor='#0f172a',
+        font_size=12,
+        font_family="Plus Jakarta Sans, sans-serif",
+        font_color="#f8fafc",
+        bordercolor='#38bdf8'
+    ),
+    margin=dict(l=20, r=20, t=40, b=30)
 )
 
 def normalize_text(text):
@@ -86,7 +198,7 @@ def normalize_text(text):
     return text.lower().strip()
 
 # ---------------------------------------------------------
-# 2. XỬ LÝ DỮ LIỆU chuẩn hóa
+# 2. XỬ LÝ DỮ LIỆU CHUẨN HÓA
 # ---------------------------------------------------------
 @st.cache_data(show_spinner=False)
 def process_data(file_dm_bytes, files_sl_tuples):
@@ -160,7 +272,7 @@ def process_data(file_dm_bytes, files_sl_tuples):
 # ---------------------------------------------------------
 # 3. SIDEBAR CONTROLS
 # ---------------------------------------------------------
-st.sidebar.title("🏛️ BẢNG DIỀU HÀNH C-SUITE")
+st.sidebar.markdown("<h3 style='color:#38bdf8; font-weight:700;'>🏛️ C-SUITE CONTROLS</h3>", unsafe_allow_html=True)
 file_dm = st.sidebar.file_uploader("1. File Danh mục Master (.xlsx)", type=["xlsx"])
 files_sl = st.sidebar.file_uploader("2. File Sản lượng Tháng (.xlsx)", type=["xlsx"], accept_multiple_files=True)
 
@@ -168,11 +280,11 @@ if file_dm and files_sl:
     dm_bytes = io.BytesIO(file_dm.read())
     sl_tuples = [(f.name, io.BytesIO(f.read())) for f in files_sl]
     
-    with st.spinner("⚡ Đang kết nối dữ liệu chiến lược C-Suite..."):
+    with st.spinner("⚡ Đang đồng bộ hệ thống biểu đồ C-Suite..."):
         df = process_data(dm_bytes, sl_tuples)
 
     st.sidebar.markdown("---")
-    st.sidebar.subheader("🎯 Bộ Lọc Tầm Nhìn Quản Trị")
+    st.sidebar.markdown("<h4 style='color:#e2e8f0; font-size:0.95rem; font-weight:700;'>🎯 BỘ LỌC TẦM NHÌN CHIẾN LƯỢC</h4>", unsafe_allow_html=True)
     
     selected_months = st.sidebar.multiselect("Chu kỳ Tháng", options=sorted(df['Thang'].unique()), default=sorted(df['Thang'].unique()))
     selected_regions = st.sidebar.multiselect("Địa Bàn / Tỉnh", options=sorted(df['Dia_Ban_Tieu_Thu'].unique()), default=sorted(df['Dia_Ban_Tieu_Thu'].unique()))
@@ -180,14 +292,13 @@ if file_dm and files_sl:
     df_filtered = df[(df['Thang'].isin(selected_months)) & (df['Dia_Ban_Tieu_Thu'].isin(selected_regions))]
 
     unit_choice = st.sidebar.radio("Đơn vị đo lường:", ["Doanh_Thu", "San_Luong"], format_func=lambda x: "Doanh Thu (VNĐ)" if x == "Doanh_Thu" else "Sản Lượng (Bao)")
-    unit_label = "VNĐ" if unit_choice == "Doanh_Thu" else "Bao"
 
     # ---------------------------------------------------------
-    # 4. DASHBOARD HEADER & KPI CARDS
+    # 4. DASHBOARD HEADER & EXECUTIVE KPI CARDS
     # ---------------------------------------------------------
     st.markdown("""
     <div class="csuite-header">
-        <h2>🏛️ BÁO CÁO QUẢN TRỊ CHIẾN LƯỢC C-SUITE (BASELINE MASTER)</h2>
+        <h2>🏛️ BÁO CÁO QUẢN TRỊ CHIẾN LƯỢC C-SUITE</h2>
         <p>Hệ thống hỗ trợ ra quyết định: Thị trường x Sản phẩm x Năng lực Nhà Phân Phối</p>
     </div>
     """, unsafe_allow_html=True)
@@ -198,15 +309,16 @@ if file_dm and files_sl:
     active_npp = df_filtered['Ma_KH'].nunique()
     active_sku = df_filtered['Ten_SP'].nunique()
 
-    c1.markdown(f"""<div class="kpi-card"><div class="kpi-title">Tổng Doanh Thu</div><div class="kpi-value">{total_rev/1e9:,.2f} Tỷ</div><div class="kpi-sub" style="color:#10b981;">VNĐ</div></div>""", unsafe_allow_html=True)
-    c2.markdown(f"""<div class="kpi-card"><div class="kpi-title">Tổng Sản Lượng</div><div class="kpi-value">{total_vol:,.0f}</div><div class="kpi-sub" style="color:#38bdf8;">Bao</div></div>""", unsafe_allow_html=True)
-    c3.markdown(f"""<div class="kpi-card"><div class="kpi-title">Số Lượng NPP Active</div><div class="kpi-value">{active_npp}</div><div class="kpi-sub" style="color:#94a3b8;">Khách hàng</div></div>""", unsafe_allow_html=True)
-    c4.markdown(f"""<div class="kpi-card"><div class="kpi-title">Danh Mục SP Active</div><div class="kpi-value">{active_sku}</div><div class="kpi-sub" style="color:#f59e0b;">SKU</div></div>""", unsafe_allow_html=True)
+    c1.markdown(f"""<div class="kpi-card"><div class="kpi-title">TỔNG DOANH THU</div><div class="kpi-value">{total_rev/1e9:,.2f} Tỷ</div><div class="kpi-sub" style="color:#10b981;">VNĐ</div></div>""", unsafe_allow_html=True)
+    c2.markdown(f"""<div class="kpi-card"><div class="kpi-title">TỔNG SẢN LƯỢNG</div><div class="kpi-value">{total_vol:,.0f}</div><div class="kpi-sub" style="color:#38bdf8;">Bao</div></div>""", unsafe_allow_html=True)
+    c3.markdown(f"""<div class="kpi-card"><div class="kpi-title">SỐ NPP ACTIVE</div><div class="kpi-value">{active_npp}</div><div class="kpi-sub" style="color:#94a3b8;">Khách hàng</div></div>""", unsafe_allow_html=True)
+    c4.markdown(f"""<div class="kpi-card"><div class="kpi-title">DANH MỤC SKU ACTIVE</div><div class="kpi-value">{active_sku}</div><div class="kpi-sub" style="color:#f59e0b;">SKU</div></div>""", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # ---------------------------------------------------------
-    # 5. KHỐI NHẬN ĐỊNH ĐIỀU HÀNH CẤP CAO (CEO EXECUTIVE INSIGHTS)
+    # 5. KHỐI NHẬN ĐỊNH CEO
     # ---------------------------------------------------------
-    # Tính toán chỉ số quản trị động
     top_region = df_filtered.groupby('Dia_Ban_Tieu_Thu')['Doanh_Thu'].sum().idxmax() if not df_filtered.empty else "N/A"
     top_region_rev = df_filtered.groupby('Dia_Ban_Tieu_Thu')['Doanh_Thu'].sum().max() if not df_filtered.empty else 0
     top_region_pct = (top_region_rev / total_rev * 100) if total_rev > 0 else 0
@@ -218,15 +330,15 @@ if file_dm and files_sl:
     <div class="ceo-box">
         <div class="ceo-title">💡 NHẬN ĐỊNH ĐIỀU HÀNH CẤP CAO (EXECUTIVE SUMMARY & CEO DIRECTIVES)</div>
         <div class="ceo-content">
-            • <b>Tập trung thị trường:</b> Địa bàn <b>{top_region}</b> đang đóng góp lớn nhất với <b>{top_region_rev/1e9:,.2f} tỷ VNĐ</b> (chiếm <b>{top_region_pct:.1f}%</b> tổng doanh số toàn hệ thống).<br>
-            • <b>Rủi ro kênh phân phối:</b> Top 3 Nhà Phân Phối lớn nhất đang nắm giữ <b>{top3_npp_pct:.1f}%</b> tổng doanh thu. Cần có chính sách quản trị công nợ và chống đứt gãy kênh linh hoạt.<br>
-            • <b>Định hướng danh mục:</b> Tập trung nguồn lực Marketing/Khuyến mãi vào nhóm <b>Ngôi Sao</b> và kiểm soát dòng tiền ở nhóm <b>Bò Sữa</b>. Rà soát kiên quyết khai tử các SKU nhóm <b>Yếu Kém</b> liên tục 3 tháng không tăng trưởng.
+            • <b>Tập trung thị trường:</b> Địa bàn <b>{top_region}</b> đang đóng góp lớn nhất với <b>{top_region_rev/1e9:,.2f} tỷ VNĐ</b> (chiếm <b>{top_region_pct:.1f}%</b> tổng doanh số).<br>
+            • <b>Rủi ro kênh phân phối:</b> Top 3 Nhà Phân Phối nắm giữ <b>{top3_npp_pct:.1f}%</b> tổng doanh thu. Cần có chính sách quản trị công nợ linh hoạt.<br>
+            • <b>Định hướng danh mục:</b> Tập trung Marketing nhóm <b>Ngôi Sao</b> và kiểm soát dòng tiền ở nhóm <b>Bò Sữa</b>. Rà soát loại bỏ SKU <b>Yếu Kém</b>.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     # ---------------------------------------------------------
-    # 6. HỆ THỐNG TAB CHIẾN LƯỢC TOÀN DIỆN
+    # 6. THẺ TABS CHIẾN LƯỢC
     # ---------------------------------------------------------
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "🎯 1. Ma Trận BCG & Chỉ Đạo Sản Phẩm",
@@ -237,11 +349,11 @@ if file_dm and files_sl:
     ])
 
     # ---------------------------------------------------------
-    # TAB 1: MA TRẬN BCG & CHỈ ĐẠO CHIẾN LƯỢC SẢN PHẨM
+    # TAB 1: MA TRẬN BCG
     # ---------------------------------------------------------
     with tab1:
-        st.markdown("##### 🎯 Ma Trận Tăng Trưởng BCG (Tối Ưu Hiển Thị Rõ Chữ)")
-        st.caption("💡 *Đã lược bỏ các nhãn chữ đè nhau. Rê chuột vào điểm bất kỳ để xem chính xác Tên sản phẩm & Thị trường.*")
+        st.markdown("##### 🎯 Ma Trận Tăng Trưởng BCG")
+        st.caption("💡 *Rê chuột vào từng điểm để xem Tên sản phẩm & Thị trường.*")
 
         bcg_df = df_filtered.groupby(['Dia_Ban_Tieu_Thu', 'Ten_SP']).agg(
             Revenue=('Doanh_Thu', 'sum'),
@@ -272,69 +384,55 @@ if file_dm and files_sl:
             )
             fig_bcg.add_hline(y=avg_rev, line_dash="dash", line_color="#64748b", annotation_text="TB Doanh Thu")
             fig_bcg.add_vline(x=avg_vol, line_dash="dash", line_color="#64748b", annotation_text="TB Sản Lượng")
-            fig_bcg.update_traces(marker=dict(size=14, opacity=0.85, line=dict(width=1, color='#ffffff')))
-            fig_bcg.update_layout(**DARK_LAYOUT, height=430, legend_title_text="Phân Loại Sản Phẩm")
+            fig_bcg.update_traces(marker=dict(size=14, opacity=0.88, line=dict(width=1.5, color='#ffffff')))
+            fig_bcg.update_layout(**DARK_LAYOUT, height=430, legend_title_text="Phân Loại BCG")
             st.plotly_chart(fig_bcg, use_container_width=True)
 
             st.markdown("---")
-            st.markdown("##### 📌 Bảng Báo Cáo Phân Lớp & Chỉ Đạo Cụ Thể Từ CEO")
+            st.markdown("##### 📌 Bảng Báo Cáo Phân Lớp & Chỉ Đạo Từ CEO")
             
             col_s, col_m, col_q, col_d = st.columns(4)
             with col_s:
-                st.markdown("<div class='quad-card' style='border-color:#38bdf8;'><b>🌟 NGUỒN LỰC TĂNG TRƯỞNG (NGÔI SAO)</b><br><small>Doanh thu Cao | Sản lượng Cao</small></div>", unsafe_allow_html=True)
+                st.markdown("<div class='quad-card' style='border-color:#38bdf8;'><b style='color:#38bdf8;'>🌟 NGUỒN LỰC TĂNG TRƯỞNG (NGÔI SAO)</b></div>", unsafe_allow_html=True)
                 st.dataframe(bcg_df[bcg_df['Phan_Loai'] == '🌟 Ngôi Sao'][['Ten_SP', 'Revenue']], hide_index=True, use_container_width=True)
-                st.caption("👉 **Chỉ đạo:** Dồn 60% ngân sách MKT, duy trì tồn kho ưu tiên.")
 
             with col_m:
-                st.markdown("<div class='quad-card' style='border-color:#34d399;'><b>🐄 DÒNG TIỀN CHỦ LỰC (BÒ SỮA)</b><br><small>Doanh thu Cao | Sản lượng Thấp</small></div>", unsafe_allow_html=True)
+                st.markdown("<div class='quad-card' style='border-color:#34d399;'><b style='color:#34d399;'>🐄 DÒNG TIỀN CHỦ LỰC (BÒ SỮA)</b></div>", unsafe_allow_html=True)
                 st.dataframe(bcg_df[bcg_df['Phan_Loai'] == '🐄 Bò Sữa'][['Ten_SP', 'Revenue']], hide_index=True, use_container_width=True)
-                st.caption("👉 **Chỉ đạo:** Giảm chi phí bán hàng, tối ưu lợi nhuận thuần.")
 
             with col_q:
-                st.markdown("<div class='quad-card' style='border-color:#fbbf24;'><b>❓ CƠ HỘI ĐỘT PHÁ (DẤU HỎI)</b><br><small>Doanh thu Thấp | Sản lượng Cao</small></div>", unsafe_allow_html=True)
+                st.markdown("<div class='quad-card' style='border-color:#fbbf24;'><b style='color:#fbbf24;'>❓ CƠ HỘI ĐỘT PHÁ (DẤU HỎI)</b></div>", unsafe_allow_html=True)
                 st.dataframe(bcg_df[bcg_df['Phan_Loai'] == '❓ Dấu Hỏi'][['Ten_SP', 'Revenue']], hide_index=True, use_container_width=True)
-                st.caption("👉 **Chỉ đạo:** Điều chỉnh chính sách giá/chiết khấu để tăng biên lợi nhuận.")
 
             with col_d:
-                st.markdown("<div class='quad-card' style='border-color:#f87171;'><b>⚠️ NGUY CƠ LẠNG PHÍ (YẾU KÉM)</b><br><small>Doanh thu Thấp | Sản lượng Thấp</small></div>", unsafe_allow_html=True)
+                st.markdown("<div class='quad-card' style='border-color:#f87171;'><b style='color:#f87171;'>⚠️ NGUY CƠ LÃNG PHÍ (YẾU KÉM)</b></div>", unsafe_allow_html=True)
                 st.dataframe(bcg_df[bcg_df['Phan_Loai'] == '⚠️ Yếu Kém'][['Ten_SP', 'Revenue']], hide_index=True, use_container_width=True)
-                st.caption("👉 **Chỉ đạo:** Lên kế hoạch loại bỏ (Phase-out) trong 60 ngày.")
 
     # ---------------------------------------------------------
-    # TAB 2: PHÂN BỔ THỊ TRƯỜNG & ĐỊA BÀN
+    # TAB 2: PHÂN BỔ THỊ TRƯỜNG
     # ---------------------------------------------------------
     with tab2:
-        st.markdown("##### 🗺️ Biểu Đồ Cây Phân Cấp Thi Thị Trường (Treemap Phân Cấp)")
-        st.caption("💡 *Thay thế Heatmap cũ để tránh bị chèn ép chữ. Tỉnh chiếm diện tích càng lớn thể hiện tỷ trọng đóng góp càng cao.*")
-
+        st.markdown("##### 🗺️ Biểu Đồ Cây Phân Cấp Thị Trường (Treemap)")
+        
         tree_df = df_filtered.groupby(['Dia_Ban_Tieu_Thu', 'Ten_SP'])[unit_choice].sum().reset_index()
         tree_df = tree_df[tree_df[unit_choice] > 0]
 
         if not tree_df.empty:
             fig_tree = px.treemap(
                 tree_df, path=['Dia_Ban_Tieu_Thu', 'Ten_SP'], values=unit_choice,
-                color=unit_choice, color_continuous_scale='Blues'
+                color=unit_choice, 
+                color_continuous_scale=[[0, '#0f172a'], [0.5, '#1e3a8a'], [1, '#0284c7']]
             )
-            fig_tree.update_traces(textinfo="label+value+percent parent")
-            fig_tree.update_layout(**DARK_LAYOUT, height=480)
+            fig_tree.update_traces(textinfo="label+value+percent parent", marker=dict(cornerradius=4))
+            fig_tree.update_layout(**DARK_LAYOUT, height=480, coloraxis_showscale=False)
             st.plotly_chart(fig_tree, use_container_width=True)
 
-            st.markdown("##### 🔍 Đánh Giá Độ Phủ Thị Trường:")
-            reg_summary = df_filtered.groupby('Dia_Ban_Tieu_Thu').agg(
-                Doanh_Thu=('Doanh_Thu', 'sum'),
-                So_NPP=('Ma_KH', 'nunique'),
-                So_SKU=('Ten_SP', 'nunique')
-            ).reset_index().sort_values(by='Doanh_Thu', ascending=False)
-            
-            st.dataframe(reg_summary, hide_index=True, use_container_width=True)
-
     # ---------------------------------------------------------
-    # TAB 3: XU HƯỚNG TĂNG TRƯỜNG SKU
+    # TAB 3: XU HƯỚNG TĂNG TRƯỜNG (SỬA LỖI ĐÈ CHỮ TRỤC X)
     # ---------------------------------------------------------
     with tab3:
         st.markdown("##### 📈 Biến Động Chu Kỳ Tăng Trưởng - Top Sản Phẩm Chủ Lực")
-        st.caption("💡 *Tự động chọn Top 5 SKU đóng góp chính để tránh đường vẽ chèn ép rối mắt.*")
-
+        
         top5_skus = df_filtered.groupby('Ten_SP')[unit_choice].sum().nlargest(5).index.tolist()
         selected_display_skus = st.multiselect("Tùy chọn danh mục sản phẩm theo dõi:", options=df_filtered['Ten_SP'].unique(), default=top5_skus)
 
@@ -343,37 +441,68 @@ if file_dm and files_sl:
         if not trend_df.empty:
             fig_line = px.line(
                 trend_df, x='Thang', y=unit_choice, color='Ten_SP', markers=True,
-                color_discrete_sequence=px.colors.qualitative.Pastel
+                color_discrete_sequence=EXECUTIVE_PALETTE
             )
-            fig_line.update_traces(line=dict(width=3), marker=dict(size=8))
-            fig_line.update_layout(**DARK_LAYOUT, height=420, legend=dict(orientation="h", y=-0.2))
+            fig_line.update_traces(line=dict(width=3), marker=dict(size=8, symbol='circle'))
+            
+            # Khắc phục triệt để đè chữ: Chuyển Legend lên vị trí trên cùng biểu đồ (y=1.12)
+            layout_trend = DARK_LAYOUT.copy()
+            layout_trend['margin'] = dict(l=20, r=20, t=60, b=50)
+            fig_line.update_layout(
+                **layout_trend, 
+                height=450, 
+                legend=dict(
+                    orientation="h", 
+                    yanchor="bottom", 
+                    y=1.12, 
+                    xanchor="left", 
+                    x=0, 
+                    title_text=""
+                ),
+                xaxis_title="",
+                yaxis_title="Doanh Thu (VNĐ)" if unit_choice == "Doanh_Thu" else "Sản Lượng (Bao)"
+            )
             st.plotly_chart(fig_line, use_container_width=True)
 
     # ---------------------------------------------------------
-    # TAB 4: NĂNG LỰC & RỦI RO KÊNH NPP
+    # TAB 4: NĂNG LỰC & RỦI RO NPP (SỬA LỖI 140G & VỠ NHÃN)
     # ---------------------------------------------------------
     with tab4:
         st.markdown("##### 🏆 Top 15 Nhà Phân Phối Đóng Góp Lớn Nhất")
         
         npp_df = df_filtered.groupby('Thuyet_Minh_NPP')[unit_choice].sum().reset_index()
         npp_df = npp_df.sort_values(by=unit_choice, ascending=True).tail(15)
+
+        # Định dạng nhãn thuần Việt chuẩn C-Suite (Thay thế '140G' thành '140.0 Tỷ')
+        if unit_choice == 'Doanh_Thu':
+            npp_df['Val_Label'] = npp_df[unit_choice].apply(lambda x: f"{x/1e9:,.1f} Tỷ")
+        else:
+            npp_df['Val_Label'] = npp_df[unit_choice].apply(lambda x: f"{x:,.0f} Bao")
+
         npp_df['Short_Name'] = npp_df['Thuyet_Minh_NPP'].apply(lambda x: x[:38] + '...' if len(x) > 38 else x)
 
         if not npp_df.empty:
             fig_npp = px.bar(
                 npp_df, x=unit_choice, y='Short_Name', orientation='h',
-                text_auto='.2s' if unit_choice == 'Doanh_Thu' else ',.0f',
+                text='Val_Label',
                 hover_name='Thuyet_Minh_NPP'
             )
-            fig_npp.update_traces(marker_color='#38bdf8', textposition='outside')
-            fig_npp.update_layout(**DARK_LAYOUT, height=450, yaxis_title="")
+            fig_npp.update_traces(
+                marker_color='#38bdf8', 
+                marker_line=dict(width=1, color='rgba(255,255,255,0.2)'),
+                textposition='outside',
+                textfont=dict(color='#cbd5e1', size=11, family="Plus Jakarta Sans")
+            )
+            layout_npp = DARK_LAYOUT.copy()
+            layout_npp['margin'] = dict(l=20, r=80, t=20, b=30)
+            fig_npp.update_layout(**layout_npp, height=480, yaxis_title="", xaxis_title="")
             st.plotly_chart(fig_npp, use_container_width=True)
 
             st.markdown("##### ⚠️ Phân Tích Mức Độ Tập Trung & Rủi Ro Phụ Thuộc (Pareto NPP):")
-            st.info(f"Top 3 NPP đóng góp {top3_npp_pct:.1f}% tổng doanh số. Cần đảm bảo hạn mức tín dụng công nợ nằm trong tầm kiểm soát an toàn.")
+            st.info(f"Top 3 NPP đóng góp {top3_npp_pct:.1f}% tổng doanh số. Cần đảm bảo hạn mức tín dụng công nợ trong tầm kiểm soát.")
 
     # ---------------------------------------------------------
-    # TAB 5: LỘ TRÌNH CEO & DỮ LIỆU CHI TIẾT
+    # TAB 5: LỘ TRÌNH CEO & EXPORT (ĐÃ SỬA LỖI TYPEERROR)
     # ---------------------------------------------------------
     with tab5:
         st.markdown("##### 🚀 Lộ Trình Hành Động Chiến Lược CEO (Executive Roadmap)")
@@ -381,19 +510,19 @@ if file_dm and files_sl:
         col_r1, col_r2, col_r3 = st.columns(3)
         with col_r1:
             st.markdown("""
-            **GIAI ĐOẠN 1: TỐI ƯU HÓA (1 - 3 Thắng)**
+            **GIAI ĐOẠN 1: TỐI ƯU HÓA (1 - 3 Tháng)**
             * Cut-off toàn bộ SKU nhóm Yếu Kém không tạo ra biên lợi nhuận.
             * Áp dụng chính sách kiểm soát hạn mức công nợ với Top 3 NPP lớn nhất.
             * Tối ưu tồn kho tại các thị trường trọng điểm.
-            """, unsafe_allow_style=True)
+            """, unsafe_allow_html=True)
             
         with col_r2:
             st.markdown("""
             **GIAI ĐOẠN 2: BỨC PHÁ (3 - 6 Tháng)**
             * Đẩy mạnh ngân sách Marketing cho nhóm Sản phẩm Ngôi Sao.
             * Mở rộng thêm 15-20% số lượng NPP tại các Tỉnh tiềm năng.
-            * Thử nghiệm điều chính giá bán với nhóm Dấu Hỏi.
-            """, unsafe_allow_style=True)
+            * Thử nghiệm điều chỉnh giá bán với nhóm Dấu Hỏi.
+            """, unsafe_allow_html=True)
 
         with col_r3:
             st.markdown("""
@@ -401,7 +530,7 @@ if file_dm and files_sl:
             * Số hóa 100% quản trị chuỗi cung ứng và Sell-out từ NPP.
             * Xây dựng chương trình đối tác chiến lược cho Top 20% NPP xuất sắc.
             * Định hình lại toàn bộ danh mục SKU thế hệ mới.
-            """, unsafe_allow_style=True)
+            """, unsafe_allow_html=True)
 
         st.markdown("---")
         st.markdown("##### 📊 Bảng Tra Cứu Dữ Liệu Chi Tiết & Export CSV")
@@ -424,4 +553,4 @@ if file_dm and files_sl:
         )
 
 else:
-    st.info("👋 Vui lòng tải lên **Master Danh Mục** và **Dữ liệu Sản Lượng** ở thanh bên trái để khởi tạo Báo Cáo Chuẩn Cơ Sở.")
+    st.info("👋 Vui lòng tải lên **Master Danh Mục** và **Dữ liệu Sản Lượng** ở thanh bên trái để khởi tạo Báo Cáo.")
