@@ -102,3 +102,7 @@ def load_and_process_data(file_dm, files_san_luong):
     df_merged['Dia_Ban'] = df_merged['Dia_Ban_Master'].fillna('Chưa phân vùng')
     
     return df_merged
+# ❌ XÓA HOẶC COMMENT ĐOẠN NÀY TRONG FILE CODE MAIN:
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(...)
