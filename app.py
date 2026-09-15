@@ -8,47 +8,52 @@ import unicodedata
 import io
 
 # ---------------------------------------------------------
-# 1. CẤU HÌNH TRANG & CUSTOM STYLING (GLOBAL TOP 10 ENTERPRISE LOOK)
+# 1. CẤU HÌNH TRANG & C-SUITE EXECUTIVE STYLING
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="KTC Global Executive Dashboard",
+    page_title="KTC C-Suite Global Strategy & Analytics",
     page_icon="🏛️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling cho C-Suite UI
+# Executive UI Style Sheet
 st.markdown("""
 <style>
-    .main { background-color: #f8fafc; }
-    .exec-summary-box {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        color: #ffffff;
-        padding: 22px 28px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-left: 6px solid #3b82f6;
-    }
-    .exec-summary-box h4 { color: #38bdf8; margin-top: 0; font-size: 1.25rem; }
-    .exec-summary-box ul { margin-bottom: 0; padding-left: 20px; color: #e2e8f0; }
+    /* Global Base */
+    .main { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
     
-    .alert-card-danger {
-        background-color: #fef2f2; border: 1px solid #fecaca;
-        border-left: 5px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 12px;
+    /* Header Container */
+    .csuite-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        color: #ffffff;
+        padding: 24px 30px;
+        border-radius: 14px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
     }
-    .alert-card-warning {
-        background-color: #fffbeb; border: 1px solid #fde68a;
-        border-left: 5px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 12px;
+    .csuite-header h2 { color: #38bdf8; margin: 0 0 8px 0; font-weight: 700; font-size: 1.6rem; }
+    .csuite-header p { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+    
+    /* Executive Metric Cards */
+    .kpi-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        transition: transform 0.2s ease;
     }
-    .alert-card-info {
-        background-color: #f0f9ff; border: 1px solid #bae6fd;
-        border-left: 5px solid #0284c7; padding: 15px; border-radius: 8px; margin-bottom: 12px;
-    }
-    .metric-container {
-        background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
-        padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: center;
-    }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .kpi-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600; }
+    .kpi-value { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin: 6px 0; }
+    .kpi-sub { font-size: 0.8rem; font-weight: 500; }
+    
+    /* Badges & Tags */
+    .badge-star { background-color: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+    .badge-cash { background-color: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+    .badge-quest { background-color: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+    .badge-dog { background-color: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -61,7 +66,7 @@ def normalize_text(text):
     return text.lower().strip()
 
 # ---------------------------------------------------------
-# 2. CACHING & XỬ LÝ DỮ LIỆU
+# 2. XỬ LÝ DỮ LIỆU TỐI ƯU HIỆU NĂNG
 # ---------------------------------------------------------
 @st.cache_data(show_spinner=False)
 def process_data(file_dm_bytes, files_sl_tuples):
@@ -136,21 +141,21 @@ def process_data(file_dm_bytes, files_sl_tuples):
     return df_merged
 
 # ---------------------------------------------------------
-# 3. SIDEBAR & BO BỘ LỌC TOÀN CỤC
+# 3. SIDEBAR CONTROLS
 # ---------------------------------------------------------
-st.sidebar.title("🏛️ C-SUITE EXECUTIVE PORTAL")
+st.sidebar.title("🏛️ C-SUITE CONTROL CENTER")
 file_dm = st.sidebar.file_uploader("1. Master File Danh mục (.xlsx)", type=["xlsx"])
-files_sl = st.sidebar.file_uploader("2. Dữ liệu Sản lượng các tháng (.xlsx)", type=["xlsx"], accept_multiple_files=True)
+files_sl = st.sidebar.file_uploader("2. Dữ liệu Sản lượng (.xlsx)", type=["xlsx"], accept_multiple_files=True)
 
 if file_dm and files_sl:
     dm_bytes = io.BytesIO(file_dm.read())
     sl_tuples = [(f.name, io.BytesIO(f.read())) for f in files_sl]
     
-    with st.spinner("🔄 Đang xử lý & phân tích dữ liệu đa chiều..."):
+    with st.spinner("⚡ Ứng dụng AI Analytics & C-Suite Matrix..."):
         df = process_data(dm_bytes, sl_tuples)
 
     st.sidebar.markdown("---")
-    st.sidebar.subheader("🎯 Bộ Lọc Quản Trị")
+    st.sidebar.subheader("🎯 Bộ Lọc Báo Cáo")
     
     all_months = sorted(df['Thang'].unique())
     selected_months = st.sidebar.multiselect("Chu kỳ Tháng", options=all_months, default=all_months)
@@ -167,71 +172,199 @@ if file_dm and files_sl:
         (df['Ten_SP'].isin(selected_prods))
     ]
 
-    # Đơn vị hiển thị
-    unit_choice = st.sidebar.radio("Đơn vị hiển thị:", ["Doanh_Thu", "San_Luong"], 
+    unit_choice = st.sidebar.radio("Chỉ số hiển thị:", ["Doanh_Thu", "San_Luong"], 
                                    format_func=lambda x: "Doanh Thu (VNĐ)" if x == "Doanh_Thu" else "Sản Lượng (Bao)")
-    unit_label = "Doanh Thu (VNĐ)" if unit_choice == "Doanh_Thu" else "Sản Lượng (Bao)"
+    unit_label = "VNĐ" if unit_choice == "Doanh_Thu" else "Bao"
 
     # ---------------------------------------------------------
-    # 4. TÓM TẮT ĐIỀU HÀNH CEO 30 GIÂY
+    # 4. EXECUTIVE BRIEFING (TÓM TẮT DÀNH CHO CEO)
     # ---------------------------------------------------------
-    st.title("🌐 KTC EXECUTIVE DASHBOARD - TOP 10 GLOBAL STANDARD")
-    
+    st.markdown("""
+    <div class="csuite-header">
+        <h2>🏛️ TẬP ĐOÀN KTC - EXECUTIVE STRATEGY DASHBOARD</h2>
+        <p>Hệ thống hỗ trợ ra quyết định chiến lược: Sản phẩm x Địa bàn tiêu thụ x Tối ưu hóa Nhà Phân Phối</p>
+    </div>
+    """, unsafe_allow_html=True)
+
     total_rev = df_filtered['Doanh_Thu'].sum()
     total_vol = df_filtered['San_Luong'].sum()
     total_npp = df_filtered['Ma_KH'].nunique()
     total_sku = df_filtered['Ten_SP'].nunique()
 
-    top_region = df_filtered.groupby('Dia_Ban_Tieu_Thu')['Doanh_Thu'].sum().idxmax() if len(df_filtered) > 0 else "N/A"
-    top_npp = df_filtered.groupby('Thuyet_Minh_NPP')['Doanh_Thu'].sum().idxmax() if len(df_filtered) > 0 else "N/A"
-    
-    # Tính biến động MoM
-    m_list = sorted(df_filtered['Thang'].unique())
-    if len(m_list) >= 2:
-        m_curr, m_prev = m_list[-1], m_list[-2]
-        rev_c = df_filtered[df_filtered['Thang'] == m_curr]['Doanh_Thu'].sum()
-        rev_p = df_filtered[df_filtered['Thang'] == m_prev]['Doanh_Thu'].sum()
-        mom_pct = ((rev_c - rev_p) / rev_p * 100) if rev_p > 0 else 0
-        mom_str = f"Tháng gần nhất ({m_curr}) tăng trưởng **{mom_pct:+.1f}%** so với {m_prev}."
-    else:
-        mom_str = "Cần tối thiểu 2 tháng dữ liệu để đánh giá tốc độ tăng trưởng MoM."
-
-    st.markdown(f"""
-    <div class="exec-summary-box">
-        <h4>💡 BÁO CÁO NHANH DÀNH CHO CEO / HỘI ĐỒNG QUẢN TRỊ (30 SECONDS BRIEF)</h4>
-        <ul>
-            <li><b>Quy mô báo cáo:</b> Tổng Doanh Thu <b>{total_rev/1e9:,.2f} Tỷ VNĐ</b> | Tổng Sản Lượng <b>{total_vol:,.0f} Bao</b> trên <b>{total_npp} NPP</b> & <b>{total_sku} Dòng Sản Phẩm</b>.</li>
-            <li><b>Địa bàn & Đối tác Cốt lõi:</b> Địa bàn tăng trưởng lớn nhất là <b>{top_region}</b>; NPP đóng góp doanh thu kỷ lục là <b>{top_npp}</b>.</li>
-            <li><b>Biến động Chu kỳ:</b> {mom_str}</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # KPIS METRICS BAR
+    # Dynamic KPI Cards
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Doanh Thu Tổng", f"{total_rev/1e9:,.2f} Tỷ VNĐ")
-    k2.metric("Sản Lượng Tổng", f"{total_vol:,.0f} Bao")
-    k3.metric("Số Nhà Phân Phối Active", f"{total_npp} KH")
-    k4.metric("Danh Mục SKU Tiêu Thụ", f"{total_sku} Dòng SP")
+    with k1:
+        st.markdown(f"""<div class="kpi-card">
+            <div class="kpi-title">Doanh Thu Toàn Hệ Thống</div>
+            <div class="kpi-value">{total_rev/1e9:,.2f} Tỷ</div>
+            <div class="kpi-sub" style="color:#10b981;">▲ Chu kỳ báo cáo</div>
+        </div>""", unsafe_allow_html=True)
+    with k2:
+        st.markdown(f"""<div class="kpi-card">
+            <div class="kpi-title">Tổng Sản Lượng Tiêu Thụ</div>
+            <div class="kpi-value">{total_vol:,.0f}</div>
+            <div class="kpi-sub" style="color:#0284c7;">Đơn vị: Bao</div>
+        </div>""", unsafe_allow_html=True)
+    with k3:
+        st.markdown(f"""<div class="kpi-card">
+            <div class="kpi-title">Mạng Lưới NPP Hoạt Động</div>
+            <div class="kpi-value">{total_npp} KH</div>
+            <div class="kpi-sub" style="color:#64748b;">Khách hàng phát sinh doanh số</div>
+        </div>""", unsafe_allow_html=True)
+    with k4:
+        st.markdown(f"""<div class="kpi-card">
+            <div class="kpi-title">Danh Mục Sản Phẩm Active</div>
+            <div class="kpi-value">{total_sku} SKU</div>
+            <div class="kpi-sub" style="color:#f59e0b;">Độ phủ sản phẩm</div>
+        </div>""", unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # ---------------------------------------------------------
-    # 5. HỆ THỐNG 4 GÓC NHÌN BỔ SUNG DÀNH CHO CEO & CẢNH BÁO
+    # 5. CÁC MODULE CHIẾN LƯỢC CAO CẤP
     # ---------------------------------------------------------
-    st.subheader("🎯 4 GÓC NHÌN QUẢN TRỊ CHIẾN LƯỢC DÀNH CHO BAN GIÁM ĐỐC")
+    st.subheader("📊 NĂNG LỰC PHÂN TÍCH CHIẾN LƯỢC C-SUITE")
     
-    v_tab1, v_tab2, v_tab3, v_tab4 = st.tabs([
-        "1️⃣ Ma Trận SP - Địa Bàn", 
-        "2️⃣ Cơ Cấu Portfolio / Mã_KH", 
-        "3️⃣ Phân Hạng Pareto 3D (ABC)", 
-        "4️⃣ Cảnh Báo Rủi Ro & Ghi Chú CEO"
+    t_opt, t_fit, t_trend, t_pareto = st.tabs([
+        "🎯 1. Tối Ưu Ưu Tiên SP - Địa Bàn (BCG Matrix)",
+        "🤝 2. Khung Chọn & Đánh Giá Tương Thích NPP",
+        "📈 3. Biến Động Chu Kỳ & Đốm Trắng Thị Trường",
+        "⚖️ 4. Phân Hạng Pareto 3D & Cảnh Báo CEO"
     ])
 
-    # GÓC NHÌN 1: MA TRẬN SẢN PHẨM - ĐỊA BÀN TIÊU THỤ (HEATMAP MATRIX)
-    with v_tab1:
-        st.markdown("##### 🗺️ Ma Trận Phủ Sản Phẩm x Địa Bàn Tiêu Thụ (Territory x SKU Matrix)")
-        st.caption("Giúp CEO phát hiện ngay 'đốm trắng' thị trường (vùng đất trống) và các địa bàn đang bị lệch cơ cấu sản phẩm.")
+    # ---------------------------------------------------------
+    # TAB 1: BCG MATRIX & PRODUCT-TERRITORY PRIORITY
+    # ---------------------------------------------------------
+    with t_opt:
+        st.markdown("##### 🚀 Ma Trận Tối Ưu Ưu Tiên Phát Triển Sản Phẩm x Địa Bàn Tiêu Thụ")
+        st.caption("Xác định chính xác cặp (Sản phẩm - Tỉnh) nào là Ngôi sao cần bơm vốn, Bò sữa cần khai thác, hoặc Yếu kém cần cắt giảm.")
+
+        # Aggregate Product x Region
+        pr_df = df_filtered.groupby(['Dia_Ban_Tieu_Thu', 'Ten_SP']).agg(
+            Revenue=('Doanh_Thu', 'sum'),
+            Volume=('San_Luong', 'sum'),
+            NPP_Count=('Ma_KH', 'nunique')
+        ).reset_index()
+
+        if not pr_df.empty:
+            # Calculate metrics for classification
+            avg_rev = pr_df['Revenue'].mean()
+            avg_vol = pr_df['Volume'].mean()
+
+            def classify_bcg(row):
+                if row['Revenue'] >= avg_rev and row['Volume'] >= avg_vol:
+                    return '🌟 Ngôi Sao (Đẩy mạnh mở rộng)'
+                elif row['Revenue'] >= avg_rev and row['Volume'] < avg_vol:
+                    return '🐄 Bò Sữa (Tối ưu lợi nhuận)'
+                elif row['Revenue'] < avg_rev and row['Volume'] >= avg_vol:
+                    return '❓ Dấu Hỏi (Thử nghiệm tăng giá)'
+                else:
+                    return '⚠️ Yếu Kém (Tái cấu trúc/Rút lui)'
+
+            pr_df['Nhom_Chien_Luoc'] = pr_df.apply(classify_bcg, axis=1)
+
+            # Scatter Plot BCG Matrix
+            fig_bcg = px.scatter(
+                pr_df,
+                x='Volume',
+                y='Revenue',
+                size='NPP_Count',
+                color='Nhom_Chien_Luoc',
+                hover_name='Ten_SP',
+                hover_data=['Dia_Ban_Tieu_Thu'],
+                text='Ten_SP',
+                color_discrete_map={
+                    '🌟 Ngôi Sao (Đẩy mạnh mở rộng)': '#0284c7',
+                    '🐄 Bò Sữa (Tối ưu lợi nhuận)': '#10b981',
+                    '❓ Dấu Hỏi (Thử nghiệm tăng giá)': '#f59e0b',
+                    '⚠️ Yếu Kém (Tái cấu trúc/Rút lui)': '#ef4444'
+                },
+                title="Ma Trận Phân Bổ Tiềm Năng Sản Phẩm Theo Địa Bàn"
+            )
+            fig_bcg.add_hline(y=avg_rev, line_dash="dash", line_color="#94a3b8", annotation_text="Trung bình Doanh thu")
+            fig_bcg.add_vline(x=avg_vol, line_dash="dash", line_color="#94a3b8", annotation_text="Trung bình Sản lượng")
+            fig_bcg.update_traces(textposition='top center')
+            fig_bcg.update_layout(height=480, plot_bgcolor='white', paper_bgcolor='white')
+            st.plotly_chart(fig_bcg, use_container_width=True)
+
+            # Detail Priority Table
+            st.markdown("**Bảng Chỉ Số Ưu Tiên Phát Triển (Product Priority Index):**")
+            st.dataframe(
+                pr_df.sort_values(by='Revenue', ascending=False).style.format({
+                    'Revenue': '{:,.0f}',
+                    'Volume': '{:,.0f}'
+                }),
+                use_container_width=True
+            )
+
+    # ---------------------------------------------------------
+    # TAB 2: DISTRIBUTOR FIT SCORE & SELECTION FRAMEWORK
+    # ---------------------------------------------------------
+    with t_fit:
+        st.markdown("##### 🤝 Khung Đánh Giá & Thuật Toán Chọn Nhà Phân Phối Tương Thích Địa Bàn")
+        st.caption("Chấm điểm NPP theo 3 chiều: Tỷ trọng đóng góp địa bàn, Độ rộng SKU tiêu thụ, và Tốc độ tăng trưởng.")
+
+        npp_eval = df_filtered.groupby(['Thuyet_Minh_NPP', 'Dia_Ban_Tieu_Thu']).agg(
+            NPP_Rev=('Doanh_Thu', 'sum'),
+            NPP_Vol=('San_Luong', 'sum'),
+            SKU_Count=('Ten_SP', 'nunique')
+        ).reset_index()
+
+        reg_tot = df_filtered.groupby('Dia_Ban_Tieu_Thu')['Doanh_Thu'].sum().to_dict()
+        max_skus = df_filtered['Ten_SP'].nunique()
+
+        if not npp_eval.empty:
+            npp_eval['Region_Total'] = npp_eval['Dia_Ban_Tieu_Thu'].map(reg_tot)
+            npp_eval['Market_Share_Pct'] = (npp_eval['NPP_Rev'] / npp_eval['Region_Total']) * 100
+            npp_eval['SKU_Coverage_Pct'] = (npp_eval['SKU_Count'] / max_skus) * 100
+
+            # Composite Fit Score Formula (0-100)
+            npp_eval['Fit_Score'] = (npp_eval['Market_Share_Pct'] * 0.6) + (npp_eval['SKU_Coverage_Pct'] * 0.4)
+
+            def fit_recommendation(score):
+                if score >= 40: return "🟢 NPP Chi Lược (Phù hợp giao độc quyền/mở rộng)"
+                elif score >= 20: return "🟡 NPP Tiềm Năng (Cần giao thêm chỉ tiêu SKU)"
+                else: return "🔴 NPP Phụ (Rủi ro phân tán nguồn lực)"
+
+            npp_eval['Danh_Gia'] = npp_eval['Fit_Score'].apply(fit_recommendation)
+
+            # Visual Distribution of Scores
+            fig_fit = px.bar(
+                npp_eval.sort_values(by='Fit_Score', ascending=False).head(15),
+                x='Fit_Score',
+                y='Thuyet_Minh_NPP',
+                color='Fit_Score',
+                orientation='h',
+                color_continuous_scale='Blues',
+                title="Top 15 Nhà Phân Phối Có Điểm Tương Thích Cao Nhất"
+            )
+            fig_fit.update_layout(height=450, yaxis={'categoryorder':'total ascending'})
+            st.plotly_chart(fig_fit, use_container_width=True)
+
+            # Executive Selection Criteria Guide
+            st.markdown("""
+            > 💡 **KHUYÊN NGHỊ TỪ CEO TOP 10 DÀNH CHO TIÊU CHUẨN CHỌN NPP:**
+            > 1. **NPP Chiến Lược (Điểm > 40):** Ưu tiên hỗ trợ chính sách thưởng quý, hỗ trợ nhân sự Sales thị trường (PG/SS).
+            > 2. **NPP Tiềm Năng (Điểm 20-40):** Bắt buộc ký hợp đồng Combi-Sell (bán kèm 2 SKU mới nếu muốn giữ chiết khấu dòng chủ lực).
+            > 3. **NPP Phụ (Điểm < 20):** Không tốn chi phí Marketing riêng, chỉ áp dụng chính sách mua đứt bán đoạn.
+            """)
+
+            st.dataframe(
+                npp_eval[['Thuyet_Minh_NPP', 'Dia_Ban_Tieu_Thu', 'Market_Share_Pct', 'SKU_Coverage_Pct', 'Fit_Score', 'Danh_Gia']]
+                .sort_values(by='Fit_Score', ascending=False)
+                .style.format({
+                    'Market_Share_Pct': '{:.1f}%',
+                    'SKU_Coverage_Pct': '{:.1f}%',
+                    'Fit_Score': '{:.1f}'
+                }),
+                use_container_width=True
+            )
+
+    # ---------------------------------------------------------
+    # TAB 3: MONTHLY TRENDS & HEATMAP MATRIX
+    # ---------------------------------------------------------
+    with t_trend:
+        st.markdown("##### 🗺️ Ma Trận Đốm Trắng Thị Trường (Territory x Product Heatmap)")
         
         matrix_df = df_filtered.pivot_table(
             index='Dia_Ban_Tieu_Thu', 
@@ -241,218 +374,83 @@ if file_dm and files_sl:
         ).fillna(0)
 
         if not matrix_df.empty:
-            # Heatmap Plotly
             fig_matrix = px.imshow(
                 matrix_df,
                 text_auto='.2s' if unit_choice == 'Doanh_Thu' else ',.0f',
                 aspect="auto",
-                color_continuous_scale="YlGnBu",
-                labels=dict(x="Dòng Sản Phẩm", y="Địa Bàn / Tỉnh", color=unit_label)
+                color_continuous_scale="Viridis",
+                labels=dict(x="Dòng Sản Phẩm", y="Địa Bàn / Tỉnh", color=unit_label),
+                title="Độ Phủ Doanh Số Sản Phẩm Tại Các Địa Bàn"
             )
-            fig_matrix.update_layout(height=450)
+            fig_matrix.update_layout(height=420)
             st.plotly_chart(fig_matrix, use_container_width=True)
 
-            # Bảng ma trận chi tiết
-            st.markdown("**Bảng Chi Tiết Giá Trị Ma Trận:**")
-            st.dataframe(matrix_df.style.format("{:,.0f}").background_gradient(cmap="Blues", axis=None), use_container_width=True)
-        else:
-            st.warning("Không có dữ liệu phù hợp với bộ lọc hiện tại.")
-
-    # GÓC NHÌN 2: CƠ CẤU DÒNG SẢN PHẨM THEO MÃ_KH (PORTFOLIO DIVERSIFICATION)
-    with v_tab2:
-        st.markdown("##### 🧩 Cơ Cấu Portfolio Dòng Sản Phẩm Của Từng Nhà Phân Phối")
-        st.caption("Đánh giá mức độ đa dạng hóa mặt hàng của các KH. Tránh tình trạng NPP chỉ bán 1 sản phẩm truyền thống mà bỏ qua sản phẩm chiến lược.")
-        
-        # Chọn top bao nhiêu NPP để hiển thị
-        top_n_npp = st.slider("Hiển thị Top Nhà Phân Phối lớn nhất:", min_value=5, max_value=30, value=10)
-        
-        top_npp_list = df_filtered.groupby('Thuyet_Minh_NPP')[unit_choice].sum().nlargest(top_n_npp).index
-        df_top_npp = df_filtered[df_filtered['Thuyet_Minh_NPP'].isin(top_npp_list)]
-        
-        # Stacked Bar Chart 100%
-        npp_prod_pivot = df_top_npp.pivot_table(index='Thuyet_Minh_NPP', columns='Ten_SP', values=unit_choice, aggfunc='sum').fillna(0)
-        
-        fig_stack = px.bar(
-            df_top_npp, 
-            y='Thuyet_Minh_NPP', 
-            x=unit_choice, 
-            color='Ten_SP', 
-            orientation='h',
-            title=f"Tỷ Trọng Dòng Sản Phẩm Của Top {top_n_npp} NPP",
-            color_discrete_sequence=px.colors.qualitative.Bold
-        )
-        fig_stack.update_layout(height=500, barmode='stack', yaxis={'categoryorder':'total ascending'})
-        st.plotly_chart(fig_stack, use_container_width=True)
-
-    # GÓC NHÌN 3: PHÂN HẠNG PARETO 3D (ABC ANALYSIS)
-    with v_tab3:
-        st.markdown("##### ⚖️ Phân Hạng Pareto ABC (Tỷ Trọng Doanh Thu, Sản Lượng & Độ Phủ SKU)")
-        st.caption("Phân hạng khách hàng theo nguyên lý 80/20: Nhóm A (Đóng góp ~80%), Nhóm B (~15%), Nhóm C (~5%).")
-
-        pareto_df = df_filtered.groupby('Thuyet_Minh_NPP').agg(
-            Total_Val=('Doanh_Thu', 'sum'),
-            Total_Vol=('San_Luong', 'sum'),
-            SKU_Coverage=('Ten_SP', 'nunique')
-        ).reset_index()
-
-        if not pareto_df.empty:
-            pareto_df = pareto_df.sort_values(by='Total_Val', ascending=False)
-            pareto_df['Cum_Val'] = pareto_df['Total_Val'].cumsum()
-            total_sum = pareto_df['Total_Val'].sum()
-            pareto_df['Cum_Pct'] = (pareto_df['Cum_Val'] / total_sum * 100) if total_sum > 0 else 0
-
-            def assign_abc(pct):
-                if pct <= 80: return 'A (Core - Top 80%)'
-                elif pct <= 95: return 'B (Potential - Next 15%)'
-                else: return 'C (Long Tail - Last 5%)'
-
-            pareto_df['Phan_Hang'] = pareto_df['Cum_Pct'].apply(assign_abc)
-
-            # Dual Axis Pareto Chart
-            fig_pareto = go.Figure()
-            fig_pareto.add_trace(go.Bar(
-                x=pareto_df['Thuyet_Minh_NPP'], 
-                y=pareto_df['Total_Val'], 
-                name="Doanh Thu",
-                marker_color='#1e3a8a'
-            ))
-            fig_pareto.add_trace(go.Scatter(
-                x=pareto_df['Thuyet_Minh_NPP'], 
-                y=pareto_df['Cum_Pct'], 
-                name="Tích Luỹ %",
-                yaxis="y2",
-                line=dict(color='#ef4444', width=3)
-            ))
-            fig_pareto.update_layout(
-                title="Biểu Đồ Đường Tích Luỹ Pareto 80/20",
-                yaxis=dict(title="Doanh Thu (VNĐ)"),
-                yaxis2=dict(title="Tích Luỹ (%)", overlaying="y", side="right", range=[0, 105]),
-                height=450,
-                showlegend=True
-            )
-            st.plotly_chart(fig_pareto, use_container_width=True)
-
-            # Summary phân hạng
-            abc_summary = pareto_df.groupby('Phan_Hang').agg(
-                So_NPP=('Thuyet_Minh_NPP', 'count'),
-                Tong_Doanh_Thu=('Total_Val', 'sum'),
-                SKU_Phu_Trung_Binh=('SKU_Coverage', 'mean')
-            ).reset_index()
-            
-            st.markdown("**Bảng Tổng Hợp Phân Hạng Nhóm Khách Hàng (ABC):**")
-            st.dataframe(abc_summary.style.format({
-                'Tong_Doanh_Thu': '{:,.0f}',
-                'SKU_Phu_Trung_Binh': '{:.1f}'
-            }), use_container_width=True)
-
-    # GÓC NHÌN 4: CẢNH BÁO RỦI RO & GHI CHÚ CHO CEO
-    with v_tab4:
-        st.markdown("##### 🚨 ĐỘNG CƠ CẢNH BÁO RỦI RO TỰ ĐỘNG (AUTOMATED EXECUTIVE ALERT ENGINE)")
-        st.caption("Các cảnh báo được hệ thống tính toán tự động dựa trên thuật toán quản trị rủi ro tập đoàn.")
-
-        # Compute Risk Indices
-        npp_sales = df_filtered.groupby('Thuyet_Minh_NPP')['Doanh_Thu'].sum().sort_values(ascending=False)
-        top3_share = (npp_sales.head(3).sum() / total_rev * 100) if total_rev > 0 else 0
-        
-        # Single SKU NPPs
-        npp_sku_cnt = df_filtered.groupby('Thuyet_Minh_NPP')['Ten_SP'].nunique()
-        single_sku_npps = npp_sku_cnt[npp_sku_cnt == 1]
-
-        # MoM Decline NPPs
-        decline_npps = []
-        if len(m_list) >= 2:
-            m_latest, m_prev = m_list[-1], m_list[-2]
-            piv_m = df_filtered.pivot_table(index='Thuyet_Minh_NPP', columns='Thang', values='Doanh_Thu', aggfunc='sum').fillna(0)
-            if m_latest in piv_m.columns and m_prev in piv_m.columns:
-                piv_m['Growth'] = (piv_m[m_latest] - piv_m[m_prev]) / piv_m[m_prev].replace(0, np.nan) * 100
-                decline_npps = piv_m[piv_m['Growth'] < -20].index.tolist()
-
-        # Alert 1: Concentration Risk
-        if top3_share > 50:
-            st.markdown(f"""
-            <div class="alert-card-danger">
-                <b>🚨 CẢNH BÁO 1: MỨC ĐỘ TẬP TRUNG DOANH THU CAO BÁO ĐỘNG (Concentration Risk)</b><br>
-                Top 3 Nhà Phân Phối lớn nhất đang chiếm tới <b>{top3_share:.1f}%</b> tổng doanh thu tập đoàn. 
-                <i>Khuyến nghị CEO:</i> Cần có chính sách mở rộng kênh phân phối nhóm B/C để giảm thiểu rủi ro khi một trong các NPP lớn dừng hợp tác.
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-            <div class="alert-card-info">
-                <b>✅ AN TOÀN TẬP TRUNG:</b> Top 3 NPP chiếm <b>{top3_share:.1f}%</b> doanh thu (Mức an toàn < 50%).
-            </div>
-            """, unsafe_allow_html=True)
-
-        # Alert 2: MoM Drop
-        if len(decline_npps) > 0:
-            st.markdown(f"""
-            <div class="alert-card-warning">
-                <b>⚠️ CẢNH BÁO 2: NGUY CƠ SỤT GIẢM DOANH SỐ NẶNG (>20% MoM)</b><br>
-                Phát hiện <b>{len(decline_npps)} Nhà Phân Phối</b> có mức sụt giảm doanh số trên 20% ở tháng gần nhất:
-                <br><code>{", ".join(decline_npps[:5])}</code> {'...' if len(decline_npps) > 5 else ''}<br>
-                <i>Hành động ngay:</i> Yêu cầu Giám đốc Bán hàng (RSM) làm việc trực tiếp để tìm nguyên nhân (chiết khấu, tồn kho, đối thủ cạnh tranh).
-            </div>
-            """, unsafe_allow_html=True)
-
-        # Alert 3: Single SKU Reliance
-        if len(single_sku_npps) > 0:
-            st.markdown(f"""
-            <div class="alert-card-warning">
-                <b>⚠️ CẢNH BÁO 3: RỦI RO LỆCH DÒNG SẢN PHẨM (Single-Product Vulnerability)</b><br>
-                Có <b>{len(single_sku_npps)} NPP</b> chỉ tiêu thụ duy nhất 1 mặt hàng (không phát sinh mặt hàng thứ 2).
-                <br><i>Hành động ngay:</i> Áp dụng chương trình Combi-sell (bán kèm sản phẩm mới) với chính sách thưởng bổ sung.
-            </div>
-            """, unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    # ---------------------------------------------------------
-    # 6. PHÂN TÍCH TỔNG THỂ & CHI TIẾT THEO CÁC THÁNG (MONTHLY TRENDS)
-    # ---------------------------------------------------------
-    st.subheader("📈 PHÂN TÍCH DIỄN BIẾN & BIẾN ĐỘNG THEO THÁNG")
-    
-    trend_type = st.radio("Góc nhìn biến động chu kỳ theo:", ["Dòng Sản Phẩm", "Địa Bàn / Tỉnh", "Top 5 Nhà Phân Phối"], horizontal=True)
-    
-    if trend_type == "Dòng Sản Phẩm":
+        st.markdown("##### 📈 Biến Động Tăng Trưởng Theo Tháng")
         trend_df = df_filtered.groupby(['Thang', 'Ten_SP'])[unit_choice].sum().reset_index()
-        fig_trend = px.line(trend_df, x='Thang', y=unit_choice, color='Ten_SP', markers=True, 
-                            title=f"Xu Hướng {unit_label} Các Dòng Sản Phẩm Qua Các Tháng")
-    elif trend_type == "Địa Bàn / Tỉnh":
-        trend_df = df_filtered.groupby(['Thang', 'Dia_Ban_Tieu_Thu'])[unit_choice].sum().reset_index()
-        fig_trend = px.line(trend_df, x='Thang', y=unit_choice, color='Dia_Ban_Tieu_Thu', markers=True,
-                            title=f"Xu Hướng {unit_label} Các Địa Bàn Tiêu Thụ Qua Các Tháng")
-    else:
-        top5_npps = df_filtered.groupby('Thuyet_Minh_NPP')[unit_choice].sum().nlargest(5).index
-        df_top5 = df_filtered[df_filtered['Thuyet_Minh_NPP'].isin(top5_npps)]
-        trend_df = df_top5.groupby(['Thang', 'Thuyet_Minh_NPP'])[unit_choice].sum().reset_index()
-        fig_trend = px.line(trend_df, x='Thang', y=unit_choice, color='Thuyet_Minh_NPP', markers=True,
-                            title=f"Xu Hướng {unit_label} Top 5 NPP Qua Các Tháng")
-
-    fig_trend.update_layout(height=450)
-    st.plotly_chart(fig_trend, use_container_width=True)
+        fig_line = px.line(
+            trend_df, x='Thang', y=unit_choice, color='Ten_SP', markers=True,
+            color_discrete_sequence=px.colors.qualitative.Bold,
+            title=f"Xu Hướng {unit_label} Từng Dòng Sản Phẩm"
+        )
+        fig_line.update_layout(height=400, plot_bgcolor='white')
+        st.plotly_chart(fig_line, use_container_width=True)
 
     # ---------------------------------------------------------
-    # 7. CHI TIẾT DỮ LIỆU & TRÍCH XUẤT FILE EXCEL
+    # TAB 4: PARETO 3D & AUTOMATED ALERTS
+    # ---------------------------------------------------------
+    with t_pareto:
+        st.markdown("##### ⚖️ Phân Hạng Pareto 80/20 & Cảnh Báo Rủi Ro Tự Động")
+
+        # Risk Alerts Engine
+        npp_revs = df_filtered.groupby('Thuyet_Minh_NPP')['Doanh_Thu'].sum().sort_values(ascending=False)
+        top3_pct = (npp_revs.head(3).sum() / total_rev * 100) if total_rev > 0 else 0
+
+        c_a1, c_a2 = st.columns(2)
+        with c_a1:
+            if top3_pct > 50:
+                st.error(f"🚨 **RỦI RO TẬP TRUNG CAO:** Top 3 NPP chiếm tới **{top3_pct:.1f}%** tổng doanh thu toàn công ty. Cần mở rộng kênh phân phối ngay!")
+            else:
+                st.success(f"✅ **MỨC TẬP TRUNG AN TOÀN:** Top 3 NPP chiếm **{top3_pct:.1f}%** doanh thu.")
+
+        with c_a2:
+            single_sku_cnt = (df_filtered.groupby('Thuyet_Minh_NPP')['Ten_SP'].nunique() == 1).sum()
+            if single_sku_cnt > 0:
+                st.warning(f"⚠️ **RỦI RO ĐƠN ĐỘC DÒNG SP:** Phát hiện **{single_sku_cnt} NPP** chỉ bán duy nhất 1 sản phẩm. Nguy cơ mất khách hàng cao nếu đối thủ hạ giá.")
+
+        # Pareto Chart
+        pareto_df = df_filtered.groupby('Thuyet_Minh_NPP').agg(Total_Val=('Doanh_Thu', 'sum')).reset_index()
+        pareto_df = pareto_df.sort_values(by='Total_Val', ascending=False)
+        pareto_df['Cum_Val'] = pareto_df['Total_Val'].cumsum()
+        pareto_df['Cum_Pct'] = (pareto_df['Cum_Val'] / total_rev * 100) if total_rev > 0 else 0
+
+        fig_pareto = go.Figure()
+        fig_pareto.add_trace(go.Bar(x=pareto_df['Thuyet_Minh_NPP'], y=pareto_df['Total_Val'], name="Doanh Thu", marker_color='#1e3a8a'))
+        fig_pareto.add_trace(go.Scatter(x=pareto_df['Thuyet_Minh_NPP'], y=pareto_df['Cum_Pct'], name="Tích Luỹ %", yaxis="y2", line=dict(color='#ef4444', width=3)))
+        fig_pareto.update_layout(
+            title="Đường Cong Tích Luỹ Pareto (Xác Định Nhóm Khách Hàng Core)",
+            yaxis=dict(title="Doanh Thu (VNĐ)"),
+            yaxis2=dict(title="Tích Luỹ (%)", overlaying="y", side="right", range=[0, 105]),
+            height=420,
+            plot_bgcolor='white'
+        )
+        st.plotly_chart(fig_pareto, use_container_width=True)
+
+    # ---------------------------------------------------------
+    # EXPORT DATA
     # ---------------------------------------------------------
     st.markdown("---")
-    st.subheader("📋 BẢNG DỮ LIỆU CHI TIẾT & XUẤT BÁO CÁO")
-    
-    st.dataframe(df_filtered[['Thang', 'Ma_KH', 'Thuyet_Minh_NPP', 'Dia_Ban_Tieu_Thu', 'Ten_SP', 'San_Luong', 'Doanh_Thu']], use_container_width=True)
-    
     output_buffer = io.BytesIO()
     with pd.ExcelWriter(output_buffer, engine='openpyxl') as writer:
-        df_filtered.to_excel(writer, index=False, sheet_name='Sales_Executive_Report')
-        if 'pareto_df' in locals():
-            pareto_df.to_excel(writer, index=False, sheet_name='Pareto_ABC_Analysis')
-        if 'matrix_df' in locals() and not matrix_df.empty:
-            matrix_df.to_excel(writer, sheet_name='Product_Region_Matrix')
+        df_filtered.to_excel(writer, index=False, sheet_name='Sales_Data')
+        if 'pr_df' in locals():
+            pr_df.to_excel(writer, index=False, sheet_name='BCG_Priority_Matrix')
 
     st.download_button(
-        label="📥 Tải Xuất Toàn Bộ Báo Cáo Excel Nâng Cao (.xlsx)",
+        label="📥 Tải Xuất Báo Cáo Chiến Lược C-Suite (.xlsx)",
         data=output_buffer.getvalue(),
-        file_name="KTC_Executive_Sales_Analytics_Report.xlsx",
+        file_name="KTC_CSuite_Strategic_Report.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
 else:
-    st.info("👋 Vui lòng tải lên file **Master Danh Mục** và **Các File Sản Lượng Tháng** ở bảng điều khiển bên trái để kích hoạt Báo cáo C-Suite Executive.")
+    st.info("👋 Vui lòng tải lên file **Master Danh Mục** và **Dữ liệu Sản Lượng** ở thanh bên trái để khởi tạo Báo Cáo Chiến Lược C-Suite.")
